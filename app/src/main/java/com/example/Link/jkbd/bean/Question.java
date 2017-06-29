@@ -1,4 +1,4 @@
-package com.example.wmc.jkbd.bean;
+package com.example.Link.jkbd.bean;
 
 /**
  * Created by wmc on 2017/6/28.
