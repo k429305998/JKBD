@@ -1,4 +1,4 @@
-package com.example.Link.jkbd;
+package com.example.wmc.jkbd;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

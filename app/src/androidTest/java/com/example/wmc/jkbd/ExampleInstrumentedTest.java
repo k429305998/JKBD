@@ -1,4 +1,4 @@
-package com.example.Link.jkbd;
+package com.example.wmc.jkbd;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

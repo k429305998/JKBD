@@ -1,4 +1,4 @@
-package com.example.Link.jkbd;
+package com.example.wmc.jkbd;
 
 import org.junit.Test;
 

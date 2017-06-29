@@ -1,4 +1,4 @@
-package com.example.Link.jkbd.bean;
+package com.example.wmc.jkbd.bean;
 
 import java.util.List;
 
