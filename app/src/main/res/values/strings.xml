@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">驾考宝典</string>
+    <string name="exam_title">exam_title</string>
 </resources>
