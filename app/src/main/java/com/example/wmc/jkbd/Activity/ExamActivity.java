@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import com.example.wmc.jkbd.ExamApplication;
 import com.example.wmc.jkbd.R;
 import com.example.wmc.jkbd.bean.Examination;
@@ -57,6 +59,9 @@ public class ExamActivity extends AppCompatActivity {
             tvOp2.setText(exam.getItem2());
             tvOp3.setText(exam.getItem3());
             tvOp4.setText(exam.getItem4());
+            Picasso.with(ExamActivity.this)
+                                        .load(exam.getUrl())
+                                       .into(mImageView);
         }
     }
 
