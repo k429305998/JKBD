@@ -26,12 +26,15 @@ import com.example.wmc.jkbd.biz.ExamBiz;
 import com.example.wmc.jkbd.biz.IExamBiz;
 import com.squareup.picasso.Picasso;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Created by Link on 2017/6/30.
  */
 
 public class ExamActivity extends AppCompatActivity {
-    TextView tvExamInfo,tvExamTitle,tvOp1,tvOp2,tvOp3,tvOp4,tvLoad,tvNo;
+    TextView tvExamInfo,tvExamTitle,tvOp1,tvOp2,tvOp3,tvOp4,tvLoad,tvNo,tvTime;
     CheckBox cb01,cb02,cb03,cb04;
     CheckBox[] cbs = new CheckBox[4];
     LinearLayout layoutLoading,layout03,layout04;
@@ -148,6 +151,7 @@ public class ExamActivity extends AppCompatActivity {
                 Examination examInfo = ExamApplication.getInstance().getExamInfo();
                 if (examInfo != null) {
                     showData(examInfo);
+                    initTimer(examInfo);
                 }
 
                 showExam(biz.getExam());
@@ -159,6 +163,40 @@ public class ExamActivity extends AppCompatActivity {
         }
     }
 
+    private void initTimer(Examination examInfo) {
+        int sumTime = examInfo.getLimitTime()*60*1000;
+
+        final long overTime = sumTime+System.currentTimeMillis();
+        final Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                long l = overTime - System.currentTimeMillis();
+                final long min = l/1000/60;
+                final long sec = l/1000%60;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvTime.setText("剩余时间:"+min+"分"+sec+"秒");
+                    }
+                });
+            }
+        },0,1000);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                timer.cancel();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        commit(null);
+                    }
+                });
+            }
+        },sumTime);
+    }
+
+
     private void showExam(Question exam) {
         Log.e("showExam","showExam,exam="+exam);
         if (exam!=null){
@@ -168,6 +206,7 @@ public class ExamActivity extends AppCompatActivity {
             tvOp2.setText(exam.getItem2());
             tvOp3.setText(exam.getItem3());
             tvOp4.setText(exam.getItem4());
+            tvTime = (TextView) findViewById(R.id.tv_time);
             layout03.setVisibility(exam.getItem3().equals("")?View.GONE:View.VISIBLE);
             cb03.setVisibility(exam.getItem3().equals("")?View.GONE:View.VISIBLE);
             layout04.setVisibility(exam.getItem4().equals("")?View.GONE:View.VISIBLE);
@@ -182,11 +221,10 @@ public class ExamActivity extends AppCompatActivity {
             }
             resetOptions();
             String userAnswer = exam.getUserAnswer();
-             if (userAnswer!=null && !userAnswer.equals(""))
-             {
-                 int userCB = Integer.parseInt(userAnswer) - 1;
-                 cbs[userCB].setChecked(true);
-             }
+            if (userAnswer!=null && !userAnswer.equals("")){
+                int userCB = Integer.parseInt(userAnswer)-1;
+                cbs[userCB].setChecked(true);
+            }
         }
     }
 
@@ -229,6 +267,7 @@ public class ExamActivity extends AppCompatActivity {
         saveUserAnswer();
         showExam(biz.nextQuestion());
     }
+
     public void commit(View view) {
         saveUserAnswer();
         int s = biz.commitExam();
@@ -248,6 +287,7 @@ public class ExamActivity extends AppCompatActivity {
                 });
         builder.create().show();
     }
+
     class LoadExamBroadcast extends BroadcastReceiver{
 
         @Override
