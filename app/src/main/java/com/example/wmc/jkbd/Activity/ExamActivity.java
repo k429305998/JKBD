@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -24,6 +25,7 @@ import com.example.wmc.jkbd.bean.Examination;
 import com.example.wmc.jkbd.bean.Question;
 import com.example.wmc.jkbd.biz.ExamBiz;
 import com.example.wmc.jkbd.biz.IExamBiz;
+import com.example.wmc.jkbd.view.QuestionAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.Timer;
@@ -33,6 +35,7 @@ import java.util.TimerTask;
  * Created by Link on 2017/6/30.
  */
 
+
 public class ExamActivity extends AppCompatActivity {
     TextView tvExamInfo,tvExamTitle,tvOp1,tvOp2,tvOp3,tvOp4,tvLoad,tvNo,tvTime;
     CheckBox cb01,cb02,cb03,cb04;
@@ -40,7 +43,9 @@ public class ExamActivity extends AppCompatActivity {
     LinearLayout layoutLoading,layout03,layout04;
     ImageView mImageView;
     ProgressBar dialog;
+    Gallery mGallery;
     IExamBiz biz;
+    QuestionAdapter mAdapter;
     boolean isLoadExamInfo = false;
     boolean isLoadQuestions = false;
 
@@ -88,6 +93,7 @@ public class ExamActivity extends AppCompatActivity {
         tvExamInfo = (TextView) findViewById(R.id.tv_examinfo);
         tvExamTitle = (TextView) findViewById(R.id.tv_exam_title);
         tvNo = (TextView) findViewById(R.id.tv_exam_no);
+        mGallery = (Gallery) findViewById(R.id.gallery);
         tvOp1 = (TextView) findViewById(R.id.tv_op1);
         tvOp2 = (TextView) findViewById(R.id.tv_op2);
         tvOp3 = (TextView) findViewById(R.id.tv_op3);
@@ -153,7 +159,7 @@ public class ExamActivity extends AppCompatActivity {
                     showData(examInfo);
                     initTimer(examInfo);
                 }
-
+                initGallery();
                 showExam(biz.getExam());
             }else{
                 layoutLoading.setEnabled(true);
@@ -161,6 +167,11 @@ public class ExamActivity extends AppCompatActivity {
                 tvLoad.setText("下载失败，点击重新下载");
             }
         }
+    }
+
+    private void initGallery() {
+        mAdapter = new QuestionAdapter(this);
+        mGallery.setAdapter(mAdapter);
     }
 
     private void initTimer(Examination examInfo) {
